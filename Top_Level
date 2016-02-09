@@ -1,0 +1,45 @@
+function [botEst, botPosition, lost] = top_localise(map,simulated,tol,unique_clusters,debug)
+% ======================================================================
+% top_localise
+% use with sim_localise & real_localise
+%
+% By Asher Winterson & Aidan Scannell
+% ======
+% Inputs
+% ======
+% map -             Map input in vector form
+% simulated -       True for simulation, false for real 
+% tol -             Particle cluster tolerance in cm or degree
+% unique_clusters - Minimum number of clusters for convergence
+% debug -           True for plotting, false for not
+% ========
+% Outputs
+% ========
+% botEst -      Estimated bot position after convergence
+% botPosition - True bot position at every iteration
+% lost -        True if max number of iterations is reached indicated...
+%               ...lost robot, otherwise false
+% =========
+% Test Maps
+% =========
+% map=[0,0;60,0;60,45;45,45;45,59;106,59;106,105;0,105]; 
+% map=[0,0;50,0;50,50;0,50];
+% map = [-30,0;-30,40;30,40;30,60;5,60;45,90;85,60;60,60;60,40;120,40;120,60;95,60;135,90;175,60;150,60;150,40;210,40;210,60;185,60;225,90;265,60;240,60;240,40;300,40;300,0]; %repeated features
+% map = [0,0;60,0;60,50;100,50;70,0;110,0;150,80;30,80;30,40;0,80]; %long map
+% 
+% ================
+% Suggested Inputs
+% ================
+% Simulated - tol = 1, unique_clusters = ~8-10;
+% Real - tol = 5, unique_clusters = ~15
+% =========================================================================
+if simulated == 1
+    tic
+    [botEst,botPosition, lost] = sim_localise(map,tol,unique_clusters,debug);
+    toc
+end
+if simulated == 0
+   tic
+   [botEst, ~, lost] = real_localise(map,tol,unique_clusters,debug);
+   toc
+end
